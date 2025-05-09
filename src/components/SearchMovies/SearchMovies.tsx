@@ -1,23 +1,21 @@
-// @ts-ignore
 
 import {useEffect, useState} from "react";
-import {getFilmsByPage, getMovieImage, getPopularMovies,} from "../../Api/apiURL.ts";
-import "./movies.css";
-import {useNavigate, useParams} from "react-router";
-import {Carousel, Pagination} from "antd";
+import { getFilmsByPage,  searchMoviesByTitle,} from "../../Api/apiURL.ts";
+import { useNavigate, useParams} from "react-router";
+import { Pagination} from "antd";
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
 import {selectCurrentUser} from "../../Slices/users.ts";
 import {addFavorite, deleteFavorite, selectFavorites} from "../../Slices/favorites.ts";
-import {MovieCard} from "./MovieCard.tsx";
+import {MovieCard} from "../Movies/MovieCard.tsx";
 
 
-export const Movies = () => {
+export const SearchMovies = () => {
     const [page, setPage] = useState<number>(Number(useParams().PageNum) || 1);
     const user = useAppSelector(selectCurrentUser);
     const favorites = useAppSelector(selectFavorites)[user]||[]
     const navigate = useNavigate();
     const [films, setFilms] = useState<Film[]>([]);
-    const [popularMovies, setPopularMovies] = useState<Film[]>([]);
+    const searchValue = useParams().title;
     const dispatch = useAppDispatch();
 
 
@@ -38,51 +36,40 @@ export const Movies = () => {
         id: number;
         title: string;
         backdrop_path: string;
-        poster_path: string;
     }
 
     const handlePageChange = (page: number) => {
         setPage(page)
-        navigate(`/page/${page}`)
+        navigate(`/search/${searchValue}/page/${page}`)
     }
 
 
 
-
     useEffect(() => {
-        getFilmsByPage(page).then(res => setFilms(res.results))
-    },[page])
+        if (searchValue) {
+            searchMoviesByTitle(searchValue,page).then(res => setFilms(res.results))
+        }
+        else {
+            getFilmsByPage(page).then(res => setFilms(res.results))
+        }
+    }, [searchValue,page]);
 
-    useEffect(() => {
-        getPopularMovies().then(res => setPopularMovies(res.results))
-    },[page])
+
+
 
 
     return (
-            <>
-
-                <div className={"MoviesContainer"}>
-
+        <>
+            <div className={"MoviesContainer"}>
                 <div className={"Banner"}></div>
-                    <h1>Popular Movies</h1>
-                    <Carousel centerMode={true} centerPadding={"10px"} slidesToShow={7} autoplay >
-                        {
-                            popularMovies.length && popularMovies.map(film =>
-                                <img
-                                    src={getMovieImage(film.poster_path)}
-                                    onClick={()=>navigate(`/movie/${film.id}`)}
-                                />)
-                        }
-                    </Carousel>
-                    <h1>Movies</h1>
                 <div className={"Movies"}>
-            {
-                films.length ? films.map(film =>{
-                    return(<MovieCard isFavorite={isFavorite}  key={film.id} id={film.id} handleFavoriteToggle={handleFavoriteToggle}/>)
-                    }
-                ) : <div>Loading...</div>
+                    {
+                        films.length ? films.map(film =>{
+                                return(<MovieCard isFavorite={isFavorite}  key={film.id} id={film.id} handleFavoriteToggle={handleFavoriteToggle}/>)
+                            }
+                        ) : <div>Loading...</div>
 
-            }
+                    }
                 </div>
                 <div style={{ textAlign: 'center', marginTop: '24px' }}>
                     <Pagination
@@ -94,7 +81,7 @@ export const Movies = () => {
                         style={{ display: 'inline-block' }}
                     />
                 </div>
-                </div>
-            </>
-            )
- }
+            </div>
+        </>
+    )
+}

@@ -1,26 +1,25 @@
 import { createAppSlice } from "../app/createAppSlice.ts";
 
-interface User {
-    id: string;
-    name: string;
-}
+
 
 const initialState = {
-    currentUser: null as User | null,
-    loggedIn: false,
+    currentUser:JSON.parse(<string>localStorage.getItem('currentUser')) || null,
+    loggedIn: !!localStorage.getItem('currentUser'),
 }
 
 export const usersSlice = createAppSlice({
     name: 'usersInfo',
     initialState,
     reducers: create => ({
-        logIn: create.reducer((state, action:{payload:User}) => {
+        logIn: create.reducer((state, action:{payload:string}) => {
             state.currentUser = action.payload
             state.loggedIn = true;
+            localStorage.setItem('currentUser', JSON.stringify(action.payload))
         }),
         logOut:create.reducer((state)=>{
             state.currentUser = null;
             state.loggedIn = false;
+            localStorage.removeItem('currentUser')
         })
     }),
     selectors: {
@@ -29,8 +28,8 @@ export const usersSlice = createAppSlice({
     }
 });
 
-console.log('Log ::: todoSlice ===', usersSlice);
 
-export const { logIn } = usersSlice.actions;
+
+export const { logIn ,logOut} = usersSlice.actions;
 export const { selectLoggedIn,selectCurrentUser } = usersSlice.selectors;
 export default usersSlice.reducer;

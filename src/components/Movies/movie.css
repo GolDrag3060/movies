@@ -18,3 +18,19 @@
 
     }
 }
+
+.movieCard{
+        height: 270px;
+        width: 230px;
+        border: 1px solid black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin: 5px;
+        img{
+            height: 80%;
+            width: 90%;
+        }
+
+}
