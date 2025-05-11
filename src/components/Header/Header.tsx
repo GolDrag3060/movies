@@ -18,7 +18,7 @@ const Header = () => {
         else navigate("/")
     }
     return (<>
-            <div>
+            <header style={{marginBottom: "20px", display: "flex", justifyContent: "space-between", alignItems: "center",width:"50%" ,marginLeft:"25%"}}>
                     <Button><NavLink to="/">Home</NavLink></Button>
                     <Button><NavLink to="/favorites">Favorites</NavLink></Button>
                 {loggedIn?<Dropdown menu={{items:[
@@ -29,10 +29,10 @@ const Header = () => {
                             ),
                         },
                     ]}}>
-                    {userEmail}
+                    <Button>{userEmail}</Button>
                     </Dropdown>:<div><Button><NavLink to="/login">Login</NavLink></Button></div>}
                     <Search  onSearch={handleSearch} style={{width:"200px"}}></Search>
-                </div>
+                </header>
 
         </>
     )

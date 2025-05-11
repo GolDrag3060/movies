@@ -1,14 +1,17 @@
-import {getFilmById, getMovieImage, getMovieTrailer} from "../../Api/apiURL.ts";
-import {Button, Image} from "antd";
+import {getActorImage, getFilmById, getMovieCast, getMovieImage, getMovieTrailer} from "../../Api/apiURL.ts";
+import {Button, Card, Carousel, Image} from "antd";
 import {useParams} from "react-router";
 import {useEffect, useState} from "react";
 import "./movie.css";
 import {addFavorite, deleteFavorite, selectFavorites} from "../../Slices/favorites.ts";
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
-import {selectCurrentUser} from "../../Slices/users.ts";
+import { selectCurrentUser} from "../../Slices/users.ts";
 import {HeartFilled, HeartOutlined} from "@ant-design/icons";
 
-
+type Actor = {
+    name: string;
+    img: string;
+}
 
 export const Movie = () => {
     const id = Number(useParams().MovieId);
@@ -23,6 +26,7 @@ export const Movie = () => {
     const favorites = useAppSelector(selectFavorites)[user]||[]
     const dispatch = useAppDispatch();
     const [trailer, setTrailer] = useState(null)
+    const [actors, setActors] = useState<Actor[]>([])
     const isFavorite =(id: number)=>{
         return favorites.includes(id)
     }
@@ -46,9 +50,14 @@ export const Movie = () => {
             }
         )
     }, []);
+    useEffect(() => {
+        getMovieCast(id).then(res=>{
+            setActors(res.cast.filter((actor: {profile_path:string}) => actor.profile_path).map((actor: { name: string; profile_path: string; }) => ({name: actor.name, img: actor.profile_path})))})
+    }, []);
+    console.log(actors)
 
     return (
-        <div>
+        <div className={"singleMovieCard"} style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
             <h2>{movie?.title}</h2>
             <Image width={400} src={getMovieImage(movie?.backdrop_path)}/>
             <p><b>Release date:</b> {movie?.release_date}</p>
@@ -67,6 +76,18 @@ export const Movie = () => {
             >
                 {isFavorite(id)?'Delete from favorite':"Add to favorite"}</Button>
 
+            <h4>Actors</h4>
+            <Carousel style={{width:"100vw"}} centerMode={true} centerPadding={"60px"} slidesToShow={9} autoplay>
+                {
+                    actors.length&&actors.map((actor)=>{
+                           return (<div className={"actor"}>
+                            <Card style={{width:100,height:150}} cover={<img  src={getActorImage(actor.img)}/>}>
+                                {actor.name}
+                            </Card>
+                        </div>)
+                    })
+                }
+            </Carousel>
         </div>
     )
 }

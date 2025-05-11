@@ -44,6 +44,7 @@ export const Movies = () => {
     const handlePageChange = (page: number) => {
         setPage(page)
         navigate(`/page/${page}`)
+        scroll(0,0)
     }
 
 
@@ -65,13 +66,15 @@ export const Movies = () => {
 
                 <div className={"Banner"}></div>
                     <h1>Popular Movies</h1>
-                    <Carousel centerMode={true} centerPadding={"10px"} slidesToShow={7} autoplay >
+                    <Carousel centerMode={true} centerPadding={"60px"} slidesToShow={5} autoplay >
                         {
                             popularMovies.length && popularMovies.map(film =>
-                                <img
+                            <div>
+                                <img style={{height:"100%",width:"90%"}}
                                     src={getMovieImage(film.poster_path)}
                                     onClick={()=>navigate(`/movie/${film.id}`)}
-                                />)
+                                />
+                            </div>)
                         }
                     </Carousel>
                     <h1>Movies</h1>

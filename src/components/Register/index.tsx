@@ -4,7 +4,8 @@ import {auth}   from "../../firebase.ts";
 import {useNavigate} from "react-router";
 import {selectLoggedIn} from "../../Slices/users.ts";
 import {useAppSelector} from "../../app/hooks.ts";
-
+import "./register.css";
+import {Button, Card} from "antd";
 
 export const Register = () => {
     const userName = useRef<HTMLInputElement>(null);
@@ -32,12 +33,13 @@ export const Register = () => {
     }
 
     return (
-        <div>
+        <Card style={{display: "flex", flexDirection: "column", alignItems: "center" , justifyContent:"space-evenly",width:"300px",margin:"0 auto",marginTop: "25vh"}}>
+
             <label htmlFor={"userName"}>User Name</label>
             <input ref={userName} type={"text"} id={"Email"}/>
             <label htmlFor={"Password"}>Password</label>
             <input type={"password"} id={"Password"} ref={password}/>
-            <button type="button" onClick={handleRegister}>Register</button>
-        </div>
+            <Button style={{marginTop:10}} onClick={handleRegister}>Register</Button>
+        </Card>
     )
 }

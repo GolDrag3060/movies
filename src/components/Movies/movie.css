@@ -19,18 +19,37 @@
     }
 }
 
-.movieCard{
-        height: 270px;
-        width: 230px;
+.movie{
+        height: 500px;
+        width: 20vw;
         border: 1px solid black;
+        border-radius: 5px;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        margin: 5px;
-        img{
-            height: 80%;
-            width: 90%;
-        }
+        margin: 15px 2vw;
+        background-color: #cfcfcf;
+}
+.imageContainer{
+    height: 70%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img{
+        width: 100%;
+        height: 100%;
+    }
+}
 
+.singleMovieCard{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 150%;
+    font-size: 12px;
+    .ant-card-body{
+        padding: 0;
+    }
 }
