@@ -77,11 +77,11 @@ export const Movie = () => {
                 {isFavorite(id)?'Delete from favorite':"Add to favorite"}</Button>
 
             <h4>Actors</h4>
-            <Carousel style={{width:"100vw"}} centerMode={true} centerPadding={"60px"} slidesToShow={9} autoplay>
+            <Carousel style={{width:"90vw"}} centerMode={true} centerPadding={"60px"} slidesToShow={7} autoplay>
                 {
                     actors.length&&actors.map((actor)=>{
                            return (<div className={"actor"}>
-                            <Card style={{width:100,height:150}} cover={<img  src={getActorImage(actor.img)}/>}>
+                            <Card style={{width:150,height:200}} cover={<img  src={getActorImage(actor.img)}/>}>
                                 {actor.name}
                             </Card>
                         </div>)
